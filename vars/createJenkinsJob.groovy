@@ -1,4 +1,4 @@
-def createJenkinsJob(String jobName, String credentialName, String stream, String jenkinsfilePath) {
+def call(String jobName, String credentialName, String stream, String jenkinsfilePath) {
     job(jobName) {
         displayName(jobName)
 
