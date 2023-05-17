@@ -1,41 +1,23 @@
-// package com.example
+package com.example
 
-import javaposse.jobdsl.dsl.*
+import hudson.model.*
 import jenkins.model.*
+import org.apache.commons.io.IOUtils
 
-def call(String jobName, String perforceCredentials, String perforceStream, String jenkinsfilePath, Map<String, String> parameters) {
-    def jobManager = Jenkins.instance.getExtensionList('javaposse.jobdsl.dsl.JobManagement').get(0)
-    
-    def dslScript = """
-        pipelineJob('$jobName') {
-            definition {
-                cpsScm {
-                    scm {
-                        perforce {
-                            credentialsId('$perforceCredentials')
-                            populate {
-                                forceClean(true)
-                                deleteNonSyncedFiles(true)
-                            }
-                            stream('$perforceStream')
-                        }
-                        scriptPath('$jenkinsfilePath')
-                    }
-                }
-            }
-            parameters {
-                ${generateParameters(parameters)}
-            }
+class ProjectReplicator {
+    def replicateProject(String existingProjectName, String newProjectName) {
+        def existingProject = Jenkins.instance.getItemByFullName(existingProjectName)
+        if (!existingProject) {
+            println("Existing project '${existingProjectName}' not found.")
+            return
         }
-    """
-    
-    jobManager.createJob(dslScript, true)
-}
 
-def generateParameters(Map<String, String> parameters) {
-    def parameterDefinitions = ""
-    parameters.each { key, value ->
-        parameterDefinitions += "stringParam('${key}', '${value}')\n"
+        def configXml = existingProject.getConfigFile().file.text
+
+        def newProject = Jenkins.instance.createProject(FreeStyleProject, newProjectName)
+        newProject.updateByXml(new StreamSource(new StringReader(configXml)))
+        newProject.save()
+
+        println("Project '${newProjectName}' replicated successfully.")
     }
-    return parameterDefinitions
 }
