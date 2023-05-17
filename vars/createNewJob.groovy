@@ -1,21 +1,14 @@
-// createPipelineJob.groovy
-def call(String jobName, String repoUrl) {
-  job(jobName) {
-    logRotator {
-      numToKeep(50)
-    }
-    scm {
-      git {
-        branch('${revision}')
-        remote {
-          url(repoUrl)
-          credentials('github')
+def call(String jobName) {
+    multibranchPipelineJob(jobName) {
+        branchSources {
+            git {
+                remote('https://github.com/your-repo.git')
+                credentialsId('your-credentials-id')
+                includes('*/master') // Update branch pattern as needed
+            }
         }
-      }
+        configure { project ->
+            project / 'sources' / 'data' / 'jenkins.branch.BranchSource' / 'source' / 'git' / 'GitSCM' / 'excludedUsers' << 'your-excluded-user'
+        }
     }
-    steps {
-      // Assuming 'myPipeline' is a custom step defined in the shared library
-      myPipeline(projectName: 'test-name')
-    }
-  }
 }
