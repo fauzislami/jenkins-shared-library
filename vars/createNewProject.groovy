@@ -1,4 +1,4 @@
-package com.example
+// package com.example
 
 import javaposse.jobdsl.dsl.*
 import jenkins.model.*
