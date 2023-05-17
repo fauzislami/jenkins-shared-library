@@ -1,21 +1,21 @@
-// vars/createNewProject.groovy
+// vars/setupNewProject.groovy
 
-def call(String projectName, Map<String, String> parameters) {
+def call(Map<String, String> projectConfig) {
     pipeline {
         agent any
         
         parameters {
-            stringParam(name: 'city', defaultValue: parameters.city, description: 'City')
-            stringParam(name: 'province', defaultValue: parameters.province, description: 'Province')
-            stringParam(name: 'nation', defaultValue: parameters.nation, description: 'Nation')
+            string(name: 'city', defaultValue: projectConfig.city, description: 'City')
+            string(name: 'province', defaultValue: projectConfig.province, description: 'Province')
+            string(name: 'nation', defaultValue: projectConfig.nation, description: 'Nation')
         }
         
         stages {
             stage('Checkout') {
                 steps {
                     script {
-                        def p4 = perforce credential: 'creds-p4'
-                        p4.sync workspace: "${projectName}-workspace", stream: '//test1/game'
+                        def p4 = perforce credential: projectConfig.credentials
+                        p4.sync workspace: "${projectConfig.name}-workspace", stream: projectConfig.stream
                     }
                 }
             }
