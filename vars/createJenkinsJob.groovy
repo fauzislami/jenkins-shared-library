@@ -1,4 +1,4 @@
-def createPerforceJob(String jobName, String credentialName, String stream, String jenkinsfilePath) {
+def createJenkinsJob(String jobName, String credentialName, String stream, String jenkinsfilePath) {
     job(jobName) {
         displayName(jobName)
 
