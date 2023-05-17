@@ -1,6 +1,6 @@
 // createNewProject.groovy
 
-def createNewProject(String projectName) {
+def call(String projectName) {
     jobDsl {
         // Use the Job DSL syntax to define and configure the project
         // For example, SCM, build steps, etc.
