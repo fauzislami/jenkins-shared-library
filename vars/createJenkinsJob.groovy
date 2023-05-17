@@ -1,13 +1,6 @@
-def call(String jobName, String credentialName, String stream, String jenkinsfilePath, Map<String, String> parameters) {
+def createPerforceJob(String jobName, String credentialName, String stream, String jenkinsfilePath) {
     job(jobName) {
         displayName(jobName)
-
-        // Parameters
-        parameters {
-            parameters.each { paramName, paramValue ->
-                stringParam(paramName, paramValue)
-            }
-        }
 
         // Perforce SCM configuration
         scm {
