@@ -1,4 +1,4 @@
-def createPerforceJobWithParameters(String jobName, String credentialName, String stream, String jenkinsfilePath, Map<String, String> parameters) {
+def call(String jobName, String credentialName, String stream, String jenkinsfilePath, Map<String, String> parameters) {
     job(jobName) {
         displayName(jobName)
         
