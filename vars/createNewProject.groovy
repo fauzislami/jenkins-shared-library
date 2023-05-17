@@ -1,18 +1,41 @@
-// createNewProject.groovy
+package com.example
 
-def call(String projectName) {
-    jobDsl {
-        // Use the Job DSL syntax to define and configure the project
-        // For example, SCM, build steps, etc.
-        // See Job DSL documentation for available options
-        additionalClasspath('path/to/extra/jar1.jar')  // Optional: Add additional JARs if needed
-        additionalClasspath('path/to/extra/jar2.jar')
-        targets {
-            job(projectName) {
-                // Configure your project here
-                // For example, SCM, build steps, etc.
-                // See Job DSL documentation for available options
+import javaposse.jobdsl.dsl.*
+import jenkins.model.*
+
+def call(String jobName, String perforceCredentials, String perforceStream, String jenkinsfilePath, Map<String, String> parameters) {
+    def jobManager = Jenkins.instance.getExtensionList('javaposse.jobdsl.dsl.JobManagement').get(0)
+    
+    def dslScript = """
+        pipelineJob('$jobName') {
+            definition {
+                cpsScm {
+                    scm {
+                        perforce {
+                            credentialsId('$perforceCredentials')
+                            populate {
+                                forceClean(true)
+                                deleteNonSyncedFiles(true)
+                            }
+                            stream('$perforceStream')
+                        }
+                        scriptPath('$jenkinsfilePath')
+                    }
+                }
+            }
+            parameters {
+                ${generateParameters(parameters)}
             }
         }
+    """
+    
+    jobManager.createJob(dslScript, true)
+}
+
+def generateParameters(Map<String, String> parameters) {
+    def parameterDefinitions = ""
+    parameters.each { key, value ->
+        parameterDefinitions += "stringParam('${key}', '${value}')\n"
     }
+    return parameterDefinitions
 }
