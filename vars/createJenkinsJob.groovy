@@ -1,40 +1,39 @@
-def call(String jobName, String credentialName, String stream, String jenkinsfilePath) {
-    job(jobName) {
-        displayName(jobName)
+// vars/createNewProject.groovy
 
-        // Perforce SCM configuration
-        scm {
-            perforce {
-                credential(credentialName)
-                depotPath(stream)
-                populate([
-                    stream: 'true',
-                    format: "jenkins-${NODE_NAME}-${JOB_NAME}-${EXECUTOR_NUMBER}",
-                    mapping: [
-                        view: "${stream}/..."
-                    ]
-                ])
-                workspaceView("${stream}/...")
-            }
+def call(String projectName, Map<String, String> parameters) {
+    pipeline {
+        agent any
+        
+        parameters {
+            stringParam(name: 'city', defaultValue: parameters.city, description: 'City')
+            stringParam(name: 'province', defaultValue: parameters.province, description: 'Province')
+            stringParam(name: 'nation', defaultValue: parameters.nation, description: 'Nation')
         }
-
-        // Jenkinsfile configuration
-        definition {
-            cpsScm {
-                scm {
-                    perforce {
-                        credential(credentialName)
-                        populate([
-                            stream: 'true',
-                            format: "jenkins-${NODE_NAME}-${JOB_NAME}-${EXECUTOR_NUMBER}",
-                            mapping: [
-                                view: "${stream}/..."
-                            ]
-                        ])
-                        workspaceView("${stream}/...")
+        
+        stages {
+            stage('Checkout') {
+                steps {
+                    script {
+                        def p4 = perforce credential: 'creds-p4'
+                        p4.sync workspace: "${projectName}-workspace", stream: '//test1/game'
                     }
                 }
-                scriptPath(jenkinsfilePath)
+            }
+            
+            stage('Build') {
+                steps {
+                    script {
+                        // Perform build steps here
+                    }
+                }
+            }
+        }
+        
+        post {
+            always {
+                script {
+                    // Perform cleanup or post-build actions here
+                }
             }
         }
     }
