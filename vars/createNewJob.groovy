@@ -1,6 +1,9 @@
 import jenkins.model.Jenkins
 
-def call(String existingJobName, String newJobName) {
+def call(Map parameters) {
+    def existingJobName = parameters.existingJobName
+    def newJobName = parameters.newJobName
+    
     // Get the Jenkins instance
     def jenkins = Jenkins.instance
 
