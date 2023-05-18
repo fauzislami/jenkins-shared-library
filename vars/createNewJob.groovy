@@ -1,31 +1,19 @@
-def call(String jobName, String paramName) {
-    def dslScript = """
-        pipelineJob("${jobName}") {
-            parameters {
-                stringParam("${paramName}", '', 'Name of the person')
-            }
-            definition {
-                cps {
-                    script('''
-                        pipeline {
-                            agent any
-                            stages {
-                                stage('Greet') {
-                                    steps {
-                                        echo "Hello!! \${params.${paramName}}"
-                                    }
-                                }
-                            }
-                        }
-                    '''.stripIndent())
-                    sandbox()
-                }
-            }
-        }
-    """
+import jenkins.model.Jenkins
 
-    jobDsl {
-        lightweight true
-        scriptText(dslScript)
+def call(String existingJobName, String newJobName) {
+    // Get the Jenkins instance
+    def jenkins = Jenkins.instance
+
+    // Get the existing job
+    def existingJob = jenkins.getItem(existingJobName)
+
+    // Print existing job details
+    if (existingJob) {
+        def newJob = jenkins.copy(existingJob, newJobName)
+        newJob.save()
+
+        println "New Job '${newJobName}' created successfully!"
+    } else {
+        println "Existing Job '${existingJobName}' not found."
     }
 }
