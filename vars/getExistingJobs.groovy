@@ -17,28 +17,21 @@
 
 import jenkins.model.Jenkins
 
-def readAndPrintListOfJobs(String fileName) {
-    def fileContent = new File(fileName).text
-    def script = evaluate(fileContent)
-    def jobsToTrigger = script.jobsToTrigger
+def listJobs() {
+    def filePath = new File('/var/jenkins_home/workspace/Master Pipeline/listOfJobs.groovy').text
+    def fileContent = filePath
+}
 
-    jobsToTrigger.each { job ->
-        println("Job: ${job.job}")
-        job.params.each { param ->
-            println("Parameter - Name: ${param.name}, Value: ${param.value}")
-        }
-        println()
-    }
-
-    return jobsToTrigger
+def readListJobs(Map parameters) {
+    def readJobs = listJobs()
 }
 
 def call(String fileName) {
-    def jobsToTrigger = readAndPrintListOfJobs(fileName)
+    def jobs = readListJobs()
     def jenkins = Jenkins.instance
     def existingJobs = jenkins.getItems()
 
-    for (jobToTrigger in jobsToTrigger) {
+    for (jobToTrigger in jobs) {
         def jobExists = existingJobs.find { job -> job.name == jobToTrigger.job }
         if (!jobExists) {
             createNewJob([existingJobName: 'test-1', newJobName: jobToTrigger.job ]) // Change 'test-1' with the template we created before
