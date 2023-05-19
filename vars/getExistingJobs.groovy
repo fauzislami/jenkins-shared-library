@@ -24,7 +24,7 @@ def listJobs() {
 
 def readListJobs(Map parameters) {
     def readJobs = listJobs()
-    return readListJobs
+    return readJobs
 }
 
 def call() {
