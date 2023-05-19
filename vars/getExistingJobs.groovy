@@ -17,30 +17,33 @@
 
 import jenkins.model.Jenkins
 
-def readAndPrintListOfJobs() {
-    def fileContent = new File("listOfJobs.groovy").text
-    def script = evaluate(fileContent)
-    def jobsToTrigger = script.jobsToTrigger
-    
-    jobsToTrigger.each { job ->
-        println("Job: ${job.job}")
-        job.params.each { param ->
-            println("Parameter - Name: ${param.name}, Value: ${param.value}")
+def call(String fileName) {
+    def readAndPrintListOfJobs() {
+        def fileContent = new File(fileName).text
+        def script = evaluate(fileContent)
+        def jobsToTrigger = script.jobsToTrigger
+
+        jobsToTrigger.each { job ->
+            println("Job: ${job.job}")
+            job.params.each { param ->
+                println("Parameter - Name: ${param.name}, Value: ${param.value}")
+            }
+            println()
         }
-        println()
+    }
+
+    def call() {
+      def jobsToTrigger = readAndPrintListOfJobs()
+      def jenkins = Jenkins.instance
+      def existingJobs = jenkins.getItems()
+
+      for (jobToTrigger in jobsToTrigger) {
+          def jobExists = existingJobs.find { job -> job.name == jobToTrigger.job }
+          if (!jobExists) {
+              createNewJob([existingJobName: 'test-1', newJobName: jobToTrigger.job ]) //change 'test-1' with the template we created before
+          }  
+      }
     }
 }
 
-def call() {
-  def jobsToTrigger = readAndPrintListOfJobs()
-  def jenkins = Jenkins.instance
-  def existingJobs = jenkins.getItems()
-
-  for (jobToTrigger in jobsToTrigger) {
-      def jobExists = existingJobs.find { job -> job.name == jobToTrigger.job }
-      if (!jobExists) {
-          createNewJob([existingJobName: 'test-1', newJobName: jobToTrigger.job ]) //change 'test-1' with the template we created before
-      }  
-  }
-}
 
