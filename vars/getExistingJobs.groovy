@@ -23,8 +23,8 @@ def listJobs() {
 }
 
 def readListJobs(Map parameters) {
-    def readJobs = listJobs()
-    return readJobs
+    def jobs = listJobs()
+    return jobs
 }
 
 def call() {
