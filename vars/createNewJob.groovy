@@ -1,20 +1,44 @@
+// import jenkins.model.Jenkins
+
+// def call(Map parameters) {
+//     def existingJobName = parameters.existingJobName
+//     def newJobName = parameters.newJobName
+    
+//     // Get the Jenkins instance
+//     def jenkins = Jenkins.instance
+
+//     // Get the existing job
+//     def existingJob = jenkins.getItem(existingJobName)
+
+//     if (existingJob) {
+//         def newJob = jenkins.copy(existingJob, newJobName)
+//         newJob.save()
+
+//         println "New Job '${newJobName}' created successfully!"
+//     } else {
+//         println "Existing Job '${existingJobName}' not found."
+//     }
+// }
+
+
 import jenkins.model.Jenkins
 
 def call(Map parameters) {
     def existingJobName = parameters.existingJobName
     def newJobName = parameters.newJobName
-    
-    // Get the Jenkins instance
     def jenkins = Jenkins.instance
-
-    // Get the existing job
-    def existingJob = jenkins.getItem(existingJobName)
+    def existingJob = jenkins.getItemByFullName(existingJobName)
 
     if (existingJob) {
-        def newJob = jenkins.copy(existingJob, newJobName)
-        newJob.save()
+        def targetFolder = jenkins.getItemByFullName(newJobName.substring(0, newJobName.lastIndexOf("/")))
 
-        println "New Job '${newJobName}' created successfully!"
+        if (targetFolder && targetFolder instanceof com.cloudbees.hudson.plugins.folder.Folder) {
+            def newJob = targetFolder.copy(existingJob, newJobName.substring(newJobName.lastIndexOf("/") + 1))
+            newJob.save()
+            println "New Job '${newJobName}' created successfully in '${targetFolder.fullName}'!"
+        } else {
+            println "Target Folder '${newJobName.substring(0, newJobName.lastIndexOf("/"))}' not found or is not a valid folder."
+        }
     } else {
         println "Existing Job '${existingJobName}' not found."
     }
