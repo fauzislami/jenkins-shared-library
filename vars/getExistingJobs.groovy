@@ -26,7 +26,7 @@ def readListJobs(Map parameters) {
     def readJobs = listJobs()
 }
 
-def call(String fileName) {
+def call() {
     def jobs = readListJobs()
     def jenkins = Jenkins.instance
     def existingJobs = jenkins.getItems()
