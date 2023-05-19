@@ -18,8 +18,7 @@
 import jenkins.model.Jenkins
 
 def readAndPrintListOfJobs() {
-    def workspace = System.getProperty("user.dir")
-    def fileContent = new File("${workspace}/listOfJobs.groovy").text
+    def fileContent = new File("**/listOfJobs.groovy").text
     def script = evaluate(fileContent)
     def jobsToTrigger = script.jobsToTrigger
     
