@@ -86,7 +86,6 @@ def call(Map parameters) {
         if (targetFolder && targetFolder instanceof com.cloudbees.hudson.plugins.folder.Folder) {
             def newJob = targetFolder.getItem(newJobName.substring(newJobName.lastIndexOf("/") + 1))
             if (!newJob) {
-                println "Job '${newJobName}' already exists."
                 newJob = targetFolder.copy(existingJob, newJobName.substring(newJobName.lastIndexOf("/") + 1))
                 newJob.save()
                 println "New Job '${newJobName}' created successfully in '${targetFolder.fullName}'!"
