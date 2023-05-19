@@ -25,7 +25,7 @@ def call(Map parameters) {
   for (jobToTrigger in jobsToTrigger) {
       def jobExists = existingJobs.find { job -> job.name == jobToTrigger.job }
       if (!jobExists) {
-          createNewJob([existingJobName: template, newJobName: jobToTrigger.job ])
+          createNewJob([existingJobName: jobTemplate, newJobName: jobToTrigger.job ])
       }  
   }
 }
