@@ -7,6 +7,8 @@ def call() {
     for (groovyFile in groovyFiles) {
         def jobType = groovyFile.tokenize('.')[0]
         def varsFile = load groovyFile
+        def BaseJobs
+        def PlatformsJobs
         def allJobs = BaseJobs + PlatformsJobs
 
         for (job in allJobs) {
@@ -36,7 +38,6 @@ def call() {
     } else {
         slackSend(channel: '#jenkins-notif-test', message: "All jobs succeed :white_check_mark:", color: 'good')
     }
-return BaseJobs
 }
 
 
