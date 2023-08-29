@@ -5,8 +5,7 @@ def call(List<String> groovyFiles) {
     for (groovyFile in groovyFiles) {
         def jobType = groovyFile.tokenize('.')[0]
         varsFile = load groovyFile
-        println groovyFile
-        println varsFile
+        def allJobs = BaseJobs + PlatformsJobs
         
         
         for (job in varsFile) {
