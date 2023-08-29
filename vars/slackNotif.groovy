@@ -36,6 +36,7 @@ def call() {
     } else {
         slackSend(channel: '#jenkins-notif-test', message: "All jobs succeed :white_check_mark:", color: 'good')
     }
+return BaseJobs, PlatformsJobs
 }
 
 
