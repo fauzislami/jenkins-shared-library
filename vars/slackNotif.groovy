@@ -15,7 +15,7 @@ def call(List<String> groovyFiles) {
 
             if (buildResult != "SUCCESS") {
                 def emoji = buildResult == "FAILURE" ? ":x:" : ":no_entry_sign:"
-                if (!jobResultsByType.containsKey(type)) {
+                if (!jobResultsByType.containsKey(jobType)) {
                     jobResultsByType[jobType] = []
                 }
                 jobResultsByType[jobType].add("[${jobName}] - <${buildUrl}|See here> - ${buildResult} $emoji")
