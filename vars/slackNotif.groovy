@@ -3,10 +3,6 @@ def call(Map parameters) {
     def jobResultsByType = [:]
     def combinedMessage = ""
 
-    def jobType = groovyFile.tokenize('.')[0]
-    def varsFile = load groovyFile
-    def allJobs = BaseJobs + PlatformsJobs
-
     for (job in allJobs) {
         def jobName = job.job
         def build = retrieveLatestBuild(jobName)
