@@ -1,10 +1,5 @@
 def call(List<String> groovyFiles) {
 node {
-    // Define the retrieveLatestBuild function here
-    def retrieveLatestBuild(jobName) {
-        def build = jenkins.model.Jenkins.instance.getItemByFullName(jobName).getLastBuild()
-        return build
-    }
         def jobResultsByType = [:]
         def combinedMessage = ""
     
@@ -43,5 +38,11 @@ node {
            slackSend(channel: '#jenkins-notif-test', message: "All jobs succeed :white_check_mark:", color: 'good')
         }
     }
+}
+
+// Define the retrieveLatestBuild function here
+def retrieveLatestBuild(jobName) {
+    def build = jenkins.model.Jenkins.instance.getItemByFullName(jobName).getLastBuild()
+    return build
 }
 
