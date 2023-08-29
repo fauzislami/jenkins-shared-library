@@ -8,7 +8,7 @@ def call(List<String> groovyFiles) {
         def allJobs = BaseJobs + PlatformsJobs
         
         
-        for (job in varsFile) {
+        for (job in allJobs) {
             def jobName = job.job
             def build = retrieveLatestBuild(jobName)
             def buildResult = "${build.result}"
