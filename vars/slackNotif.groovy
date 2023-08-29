@@ -1,7 +1,7 @@
 def call() {
     def jobResultsByType = [:]
     def combinedMessage = ""
-    def groovyFiles = "UE4_27.groovy"
+    def groovyFile = "UE4_27.groovy"
     
     def jobType = groovyFile.tokenize('.')[0]
     def varsFile = load groovyFile
