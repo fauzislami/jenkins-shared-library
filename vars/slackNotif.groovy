@@ -3,7 +3,7 @@ def call(List<String> groovyFiles) {
     def combinedMessage = ""
 
     for (groovyFile in groovyFiles) {
-        def jobType = groovyFile.tokenize('.')[0]
+        def jobType = groovyFile.tokenize(".")[0]
         varsFile = load groovyFile
         println varsFile
         
