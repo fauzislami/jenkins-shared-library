@@ -41,6 +41,8 @@ def call() {
     }
 }
 
+return this
+
 
 def retrieveLatestBuild(jobName) {
     def build = jenkins.model.Jenkins.instance.getItemByFullName(jobName).getLastBuild()
