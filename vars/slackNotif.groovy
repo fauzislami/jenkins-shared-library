@@ -1,4 +1,4 @@
-void call(List<String> groovyFiles) {
+def call(List<String> groovyFiles) {
     def jobResultsByType = [:]
     def combinedMessage = ""
 
