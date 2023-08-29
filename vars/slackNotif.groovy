@@ -1,13 +1,12 @@
 def call(List<String> groovyFiles) {
     def jobResultsByType = [:]
     def combinedMessage = ""
-    //def allJobs
-    def BaseJobs = []
+    def allJobs
 
     for (groovyFile in groovyFiles) {
         def jobType = groovyFile.tokenize('.')[0]
         def varsFile = load groovyFile
-        //allJobs = BaseJobs + PlatformsJobs
+        allJobs = BaseJobs + PlatformsJobs
         println BaseJobs
         
         for (job in BaseJobs) {
