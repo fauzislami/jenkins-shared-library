@@ -1,25 +1,25 @@
-def call() {
+def call(List<String> groovyFiles) {
     def jobResultsByType = [:]
     def combinedMessage = ""
-    def groovyFile = "UE4_27.groovy"
-    
-    def jobType = groovyFile.tokenize('.')[0]
-    def varsFile = load groovyFile
-    def allJobs = BaseJobs + PlatformsJobs
-    println allJobs
 
-    for (job in allJobs) {
-        def jobName = job.job
-        def build = retrieveLatestBuild(jobName)
-        def buildResult = "${build.result}"
-        def buildUrl = build.getAbsoluteUrl()
+    for (groovyFile in groovyFiles) {
+        def jobType = groovyFile.tokenize('.')[0]
+        def varsFile = load groovyFile
+        def allJobs = BaseJobs + PlatformsJobs
 
-        if (buildResult != "SUCCESS") {
-            def emoji = buildResult == "FAILURE" ? ":x:" : ":no_entry_sign:"
-            if (!jobResultsByType.containsKey(type)) {
-                jobResultsByType[jobType] = []
+        for (job in allJobs) {
+            def jobName = job.job
+            def build = retrieveLatestBuild(jobName)
+            def buildResult = "${build.result}"
+            def buildUrl = build.getAbsoluteUrl()
+
+            if (buildResult != "SUCCESS") {
+                def emoji = buildResult == "FAILURE" ? ":x:" : ":no_entry_sign:"
+                if (!jobResultsByType.containsKey(type)) {
+                    jobResultsByType[jobType] = []
+                }
+                jobResultsByType[jobType].add("[${jobName}] - <${buildUrl}|See here> - ${buildResult} $emoji")
             }
-            jobResultsByType[jobType].add("[${jobName}] - <${buildUrl}|See here> - ${buildResult} $emoji")
         }
     }
 
@@ -35,8 +35,6 @@ def call() {
         slackSend(channel: '#jenkins-notif-test', message: "All jobs succeed :white_check_mark:", color: 'good')
     }
 }
-
-return this
 
 
 def retrieveLatestBuild(jobName) {
