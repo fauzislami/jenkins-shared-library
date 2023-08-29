@@ -1,10 +1,11 @@
-def call(List<String> groovyFiles) {
+//def call(List<String> groovyFiles) {
+def call() {
     def jobResultsByType = [:]
     def combinedMessage = ""
 
     for (groovyFile in groovyFiles) {
         def jobType = groovyFile.tokenize('.')[0]
-        def varsFile = load groovyFile
+        def varsFile = load 'UE4_27.groovy'
         def allJobs = BaseJobs + PlatformsJobs
 
         for (job in allJobs) {
