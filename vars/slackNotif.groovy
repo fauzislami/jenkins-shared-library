@@ -34,9 +34,9 @@ def call(List<String> groovyFiles) {
     if (!combinedMessage.isEmpty()) {
         slackSend(channel: '#jenkins-notif-test', message: combinedMessage, color: 'danger')
     } 
-    //else {
-    //    slackSend(channel: '#jenkins-notif-test', message: "All jobs succeed :white_check_mark:", color: 'good')
-    //}
+    else {
+       slackSend(channel: '#jenkins-notif-test', message: "All jobs succeed :white_check_mark:", color: 'good')
+    }
 }
 
 // Define the retrieveLatestBuild function here
