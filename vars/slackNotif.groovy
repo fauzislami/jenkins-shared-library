@@ -1,11 +1,11 @@
-def call(String jobType, List<String> groovyFiles) {
+def call(List<String> groovyFiles) {
     def jobResultsByType = [:]
     def combinedMessage = ""
-    def allJobs = BaseJobs + PlatformsJobs
 
-    for (String groovyFile : groovyFiles) {
-        def type = groovyFile.tokenize('.')[0]
+    for (groovyFile in groovyFiles) {
+        def jobType = groovyFile.tokenize('.')[0]
         def varsFile = load groovyFile
+        def allJobs = BaseJobs + PlatformsJobs
 
         for (job in allJobs) {
             def jobName = job.job
@@ -16,9 +16,9 @@ def call(String jobType, List<String> groovyFiles) {
             if (buildResult != "SUCCESS") {
                 def emoji = buildResult == "FAILURE" ? ":x:" : ":no_entry_sign:"
                 if (!jobResultsByType.containsKey(type)) {
-                    jobResultsByType[type] = []
+                    jobResultsByType[jobType] = []
                 }
-                jobResultsByType[type].add("[${jobName}] - <${buildUrl}|See here> - ${buildResult} $emoji")
+                jobResultsByType[jobType].add("[${jobName}] - <${buildUrl}|See here> - ${buildResult} $emoji")
             }
         }
     }
