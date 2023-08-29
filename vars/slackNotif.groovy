@@ -1,15 +1,15 @@
 def call(List<String> groovyFiles) {
     def jobResultsByType = [:]
     def combinedMessage = ""
-    def allJobs
+    //def allJobs
 
     for (groovyFile in groovyFiles) {
         def jobType = groovyFile.tokenize('.')[0]
         def varsFile = load groovyFile
-        allJobs = BaseJobs + PlatformsJobs
+        //allJobs = BaseJobs + PlatformsJobs
         println varsFile
         
-        for (job in BaseJobs) {
+        for (job in varsFile) {
             def jobName = job.job
             def build = retrieveLatestBuild(jobName)
             def buildResult = "${build.result}"
