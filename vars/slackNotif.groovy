@@ -5,7 +5,7 @@ node {
     
         for (groovyFile in groovyFiles) {
             def jobType = groovyFile.tokenize('.')[0]
-            varsFile = load groovyFile
+            def varsFile = load groovyFile
             def allJobs = BaseJobs + PlatformsJobs
             
             
