@@ -1,25 +1,24 @@
-def call(List<String> groovyFiles) {
+def call(Map parameters) {
+    def allJobs = parameters.jobs
     def jobResultsByType = [:]
     def combinedMessage = ""
 
-    for (groovyFile in groovyFiles) {
-        def jobType = groovyFile.tokenize('.')[0]
-        def varsFile = load groovyFile
-        def allJobs = BaseJobs + PlatformsJobs
+    def jobType = groovyFile.tokenize('.')[0]
+    def varsFile = load groovyFile
+    def allJobs = BaseJobs + PlatformsJobs
 
-        for (job in allJobs) {
-            def jobName = job.job
-            def build = retrieveLatestBuild(jobName)
-            def buildResult = "${build.result}"
-            def buildUrl = build.getAbsoluteUrl()
+    for (job in allJobs) {
+        def jobName = job.job
+        def build = retrieveLatestBuild(jobName)
+        def buildResult = "${build.result}"
+        def buildUrl = build.getAbsoluteUrl()
 
-            if (buildResult != "SUCCESS") {
-                def emoji = buildResult == "FAILURE" ? ":x:" : ":no_entry_sign:"
-                if (!jobResultsByType.containsKey(jobType)) {
-                    jobResultsByType[jobType] = []
-                }
-                jobResultsByType[jobType].add("[${jobName}] - <${buildUrl}|See here> - ${buildResult} $emoji")
+        if (buildResult != "SUCCESS") {
+            def emoji = buildResult == "FAILURE" ? ":x:" : ":no_entry_sign:"
+            if (!jobResultsByType.containsKey(jobType)) {
+                jobResultsByType[jobType] = []
             }
+            jobResultsByType[jobType].add("[${jobName}] - <${buildUrl}|See here> - ${buildResult} $emoji")
         }
     }
 
