@@ -15,8 +15,8 @@ def call(List<String> groovyFiles) {
             def buildResult = "${build.result}"
             def buildUrl = build.getAbsoluteUrl()
 
-            if (buildResult != "SUCCESS") {
-                def emoji = buildResult == "FAILURE" ? ":x:" : ":no_entry_sign:"
+            if (buildResult != "FAILURE") {
+                def emoji = buildResult == "SUCCESS" ? ":x:" : ":no_entry_sign:"
                 if (!jobResultsByType.containsKey(jobType)) {
                     jobResultsByType[jobType] = []
                 }
