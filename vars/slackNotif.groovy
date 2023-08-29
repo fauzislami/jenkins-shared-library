@@ -1,6 +1,8 @@
 def call(List<String> groovyFiles) {
     def jobResultsByType = [:]
     def combinedMessage = ""
+    def BaseJobs
+    def PlatformsJobs
     def allJobs
 
     for (groovyFile in groovyFiles) {
