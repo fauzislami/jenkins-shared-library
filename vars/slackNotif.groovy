@@ -1,28 +1,25 @@
 def call() {
     def jobResultsByType = [:]
     def combinedMessage = ""
-    def groovyFiles = ["UE4_27.groovy", "UE5_0.groovy", "UE5_1.groovy", "UE5_2.groovy"] 
+    def groovyFiles = "UE4_27.groovy"
     
+    def jobType = groovyFile.tokenize('.')[0]
+    def varsFile = load groovyFile
+    def allJobs = BaseJobs + PlatformsJobs
+    println allJobs
 
-    for (groovyFile in groovyFiles) {
-        def jobType = groovyFile.tokenize('.')[0]
-        def varsFile = load groovyFile
-        def allJobs = BaseJobs + PlatformsJobs
-        println varsFile
+    for (job in allJobs) {
+        def jobName = job.job
+        def build = retrieveLatestBuild(jobName)
+        def buildResult = "${build.result}"
+        def buildUrl = build.getAbsoluteUrl()
 
-        for (job in allJobs) {
-            def jobName = job.job
-            def build = retrieveLatestBuild(jobName)
-            def buildResult = "${build.result}"
-            def buildUrl = build.getAbsoluteUrl()
-
-            if (buildResult != "SUCCESS") {
-                def emoji = buildResult == "FAILURE" ? ":x:" : ":no_entry_sign:"
-                if (!jobResultsByType.containsKey(type)) {
-                    jobResultsByType[jobType] = []
-                }
-                jobResultsByType[jobType].add("[${jobName}] - <${buildUrl}|See here> - ${buildResult} $emoji")
+        if (buildResult != "SUCCESS") {
+            def emoji = buildResult == "FAILURE" ? ":x:" : ":no_entry_sign:"
+            if (!jobResultsByType.containsKey(type)) {
+                jobResultsByType[jobType] = []
             }
+            jobResultsByType[jobType].add("[${jobName}] - <${buildUrl}|See here> - ${buildResult} $emoji")
         }
     }
 
