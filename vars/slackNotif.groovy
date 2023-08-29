@@ -1,5 +1,5 @@
 def call(List<String> groovyFiles) {
-node('master') {
+node {
         def jobResultsByType = [:]
         def combinedMessage = ""
     
