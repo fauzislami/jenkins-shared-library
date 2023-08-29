@@ -8,15 +8,16 @@ def call(List<String> groovyFiles) {
         def jobType = groovyFile.tokenize('.')[0]
         def varsFile = load groovyFile
         def allJobs = BaseJobs + PlatformsJobs
-
+        println allJobs
+        
         for (job in allJobs) {
             def jobName = job.job
             def build = retrieveLatestBuild(jobName)
             def buildResult = "${build.result}"
             def buildUrl = build.getAbsoluteUrl()
 
-            if (buildResult != "FAILURE") {
-                def emoji = buildResult == "SUCCESS" ? ":x:" : ":no_entry_sign:"
+            if (buildResult != "SUCCESS") {
+                def emoji = buildResult == "FAILURE" ? ":x:" : ":no_entry_sign:"
                 if (!jobResultsByType.containsKey(jobType)) {
                     jobResultsByType[jobType] = []
                 }
