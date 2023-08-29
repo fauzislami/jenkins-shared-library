@@ -10,6 +10,7 @@ def call() {
         def BaseJobs = ""
         def PlatformsJobs = ""
         def allJobs = BaseJobs + PlatformsJobs
+        println allJobs
 
         for (job in allJobs) {
             def jobName = job.job
