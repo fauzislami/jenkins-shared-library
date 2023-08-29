@@ -2,6 +2,7 @@ def call(Map parameters) {
     def allJobs = parameters.jobs
     def jobResultsByType = [:]
     def combinedMessage = ""
+    def jobType = groovyFile.tokenize('.')[0]
 
     for (job in allJobs) {
         def jobName = job.job
